@@ -29,6 +29,7 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -158,7 +159,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void fetchStoryWithOptions(String pic_ori) {
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(30, TimeUnit.SECONDS)  // 连接超时时间
+                .writeTimeout(30, TimeUnit.SECONDS)    // 写入超时时间
+                .readTimeout(30, TimeUnit.SECONDS)     // 读取超时时间
+                .build();
+
         String url = "http://192.168.1.24:8080/getResult"; // 请替换为实际的URL
         // 确保使用正确的Content-Type
         RequestBody requestBody = new FormBody.Builder()
